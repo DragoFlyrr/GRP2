@@ -53,7 +53,7 @@ float4 main( INPUT_PIXEL input ) : SV_TARGET
 	
 	
 	float3 specularviewdir = normalize(input.CameraCoord - input.worldcoord);
-	float3 halfvector = normalize((-lightdir) + specularviewdir);
+	float3 halfvector = normalize((-lightdir) * specularviewdir);
 	float intensity = max(clamp(dot(input.normal, normalize(halfvector)),0, 1),1);
 	directionlight *= intensity;
 
@@ -63,7 +63,7 @@ float4 main( INPUT_PIXEL input ) : SV_TARGET
 	//float Attenuation = 1.0 - clamp(MAGNITUDE(pointlightpos - input.worldcoord) / lightradius, 0, 1);
 	//pointlight *= Attenuation;
 	specularviewdir = normalize(input.CameraCoord - input.worldcoord);
-	halfvector = normalize((-pointlightdir) + specularviewdir);
+	halfvector = normalize((-pointlightdir) * specularviewdir);
 	intensity = max(clamp(dot(input.normal, normalize(halfvector)), 0, 1), 1);
 	pointlight *= intensity;
 
@@ -78,7 +78,7 @@ float4 main( INPUT_PIXEL input ) : SV_TARGET
 	//Attneuation *= 1.0 - clamp((coneratio - surfaceratio)/(coneratio
 	//spotlight *= Attenuation;
 	specularviewdir = normalize(input.CameraCoord - input.worldcoord);
-	halfvector = normalize((-spotlightdir) + specularviewdir);
+	halfvector = normalize((-spotlightdir) * specularviewdir);
 	intensity = max(clamp(dot(input.normal, normalize(halfvector)), 0, 1), 1);
 	spotlight *= intensity;
 

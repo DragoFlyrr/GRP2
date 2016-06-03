@@ -570,7 +570,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	toShader3.coneratio = 0.5f;
 #pragma endregion
 
-#pragma region Object Loading
+#pragma region Object / Model Loading
 	std::vector<XMFLOAT3> verticies;
 	std::vector<XMFLOAT2> uvs;
 	std::vector<XMFLOAT3> normals;
@@ -1294,7 +1294,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Setting Blend State
-		devicecontext->OMSetBlendState(blendstate, NULL, 0xFFFFFFF);
+		devicecontext->OMSetBlendState(blendstate, NULL, 0xFFFFFFFF);
 #pragma endregion
 
 #pragma region Setting Rasterizer State
@@ -1478,7 +1478,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Drawing Plane4
-			devicecontext->DrawIndexed(6, 0, 0);
+			devicecontext->DrawIndexed(6, 0, 0);	
 #pragma endregion
 
 
