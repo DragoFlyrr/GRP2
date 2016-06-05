@@ -81,7 +81,7 @@ float4 main( INPUT_PIXEL input ) : SV_TARGET
 	halfvector = normalize((-spotlightdir) * specularviewdir);
 	intensity = max(clamp(dot(input.normal, normalize(halfvector)), 0, 1), 1);
 	spotlight *= intensity;
-
+	
 
 	if (newColor.a <= 0.1f)
 		discard;
