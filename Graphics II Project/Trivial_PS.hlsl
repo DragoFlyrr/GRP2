@@ -14,7 +14,6 @@ SamplerState filters[2] : register(s0);
 
 cbuffer LIGHTING : register(b1)
 {
-
 	float3 lightingbools;
 	float padding;
 

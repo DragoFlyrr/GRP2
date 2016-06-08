@@ -727,6 +727,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 #pragma endregion
 
 #pragma region Setting Vertex Buffer Descriptions
+
 	D3D11_BUFFER_DESC vertbuffdesc;
 	ZeroMemory(&vertbuffdesc, sizeof(vertbuffdesc));
 	vertbuffdesc.Usage = D3D11_USAGE_IMMUTABLE;
