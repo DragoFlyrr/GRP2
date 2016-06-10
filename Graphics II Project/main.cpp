@@ -194,6 +194,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 
 	toShader2.Viewmatrix = View[0];
 	toShader2.Projmatrix = Projection[0];
+	
 #pragma endregion
 
 #pragma region Create Device and SwapChain
