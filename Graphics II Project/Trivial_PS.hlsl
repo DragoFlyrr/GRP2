@@ -54,7 +54,8 @@ float4 main( INPUT_PIXEL input ) : SV_TARGET
 	float3 specularviewdir = normalize(input.CameraCoord - input.worldcoord);
 	float3 halfvector = normalize((-lightdir) * specularviewdir);
 	float intensity = max(clamp(dot(input.normal, normalize(halfvector)),0, 1),1);
-	directionlight *= intensity;
+
+	directionlight *= intensity *= newColor;
 
 	//pointlight
 	float3 pointlightdir = normalize(pointlightpos - input.worldcoord);
@@ -64,7 +65,8 @@ float4 main( INPUT_PIXEL input ) : SV_TARGET
 	specularviewdir = normalize(input.CameraCoord - input.worldcoord);
 	halfvector = normalize((-pointlightdir) * specularviewdir);
 	intensity = max(clamp(dot(input.normal, normalize(halfvector)), 0, 1), 1);
-	pointlight *= intensity;
+	
+	pointlight *= intensity *= newColor;
 
 	//spotlight
 
@@ -79,7 +81,7 @@ float4 main( INPUT_PIXEL input ) : SV_TARGET
 	specularviewdir = normalize(input.CameraCoord - input.worldcoord);
 	halfvector = normalize((-spotlightdir) * specularviewdir);
 	intensity = max(clamp(dot(input.normal, normalize(halfvector)), 0, 1), 1);
-	spotlight *= intensity;
+	spotlight *= intensity *= newColor;
 	
 
 	if (newColor.a <= 0.1f)

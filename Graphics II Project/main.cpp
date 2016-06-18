@@ -83,6 +83,8 @@ class DEMO_APP
 
 	ID3D11BlendState*				blendstate;
 
+	ID3D11SamplerState*				samplerState;
+
 	// TODO: PART 2 STEP 2
 
 	D3D11_VIEWPORT					viewport[2];
@@ -136,7 +138,7 @@ public:
 
 	DEMO_APP(HINSTANCE hinst, WNDPROC proc);
 	bool Run();
-	bool ShutDown();
+	bool ShutDown(); 
 
 	SIMPLE_VERTEX plane2[4];
 	SIMPLE_VERTEX plane3[4];
@@ -584,25 +586,25 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 		loadedvertricies[i].vertex[1] = verticies[i].y;
 		loadedvertricies[i].vertex[2] = verticies[i].z;
 		loadedvertricies[i].uv[0] = uvs[i].x;
-		loadedvertricies[i].uv[1] = uvs[i].y;
+		loadedvertricies[i].uv[1] = (uvs[i].y);
 		loadedvertricies[i].normals[0] = normals[i].x;
 		loadedvertricies[i].normals[1] = normals[i].y;
 		loadedvertricies[i].normals[2] = normals[i].z;
 	}
-
+																																																																						
 	std::vector<XMFLOAT3> verticies2;
 	std::vector<XMFLOAT2> uvs2;
 	std::vector<XMFLOAT3> normals2;
 
-	LoadOBJ("Treething.obj", verticies2, uvs2, normals2);
+	LoadOBJ("treething2.obj", verticies2, uvs2, normals2);
 	SIMPLE_VERTEX loadedvertricies2[1092];
 	for (unsigned int i = 0; i < 1092; i++)
 	{
 		loadedvertricies2[i].vertex[0] = verticies2[i].x;
 		loadedvertricies2[i].vertex[1] = verticies2[i].y;
 		loadedvertricies2[i].vertex[2] = verticies2[i].z;
-		loadedvertricies2[i].uv[0] = uvs2[i].x;
-		loadedvertricies2[i].uv[1] = (1 - uvs2[i].y);
+		loadedvertricies2[i].uv[0] = (uvs2[i].x);
+		loadedvertricies2[i].uv[1] = (1.0f-uvs2[i].y);
 		loadedvertricies2[i].normals[0] = normals2[i].x;
 		loadedvertricies2[i].normals[1] = normals2[i].y;
 		loadedvertricies2[i].normals[2] = normals2[i].z;
@@ -1108,6 +1110,19 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	device->CreateBlendState(&blenddesc, &blendstate);
 
 #pragma endregion
+	D3D11_SAMPLER_DESC sampler_desc;
+	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
+	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampler_desc.MinLOD = -FLT_MAX;
+	sampler_desc.MaxLOD = FLT_MAX;
+	sampler_desc.MipLODBias = 0.0f;
+	sampler_desc.MaxAnisotropy = 1;
+	sampler_desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+
+	device->CreateSamplerState(&sampler_desc, &samplerState);
 }
 
 bool DEMO_APP::Run()
@@ -1394,7 +1409,11 @@ bool DEMO_APP::Run()
 		devicecontext->PSSetShaderResources(0, 1, &shaderview3);
 #pragma endregion
 
-#pragma region Draw Pyramid
+#pragma region Setting Sampler State
+		devicecontext->PSSetSamplers(0, 1, &samplerState);
+#pragma endregion
+
+#pragma region Draw Death
 		devicecontext->Draw(1092, 0);
 #pragma endregion
 

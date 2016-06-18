@@ -53,7 +53,7 @@ OUTPUT_VERTEX main( INPUT_VERTEX fromVertexBuffer )
 
 	// TODO : PART 3 STEP 7
 	//sendToRasterizer.colorOut = fromVertexBuffer.color;
-	sendToRasterizer.uv = fromVertexBuffer.uv;
+	sendToRasterizer.uv = fromVertexBuffer.uv.xy;
 	// END PART 3
 
 	return sendToRasterizer;

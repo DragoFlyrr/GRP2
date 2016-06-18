@@ -28,6 +28,8 @@ struct SIMPLE_VERTEX
 	float normals[3];
 };
 
+
+
 //
 //struct Grid
 //{
