@@ -1404,7 +1404,9 @@ bool DEMO_APP::Run()
 #pragma region Setting Index Buffers
 		devicecontext->IASetIndexBuffer(quadindexbuffer, DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
 #pragma endregion
-
+#pragma region Setting Sampler State
+		devicecontext->PSSetSamplers(0, 1, &samplerState);
+#pragma endregion
 #pragma region Drawing Plane
 		devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
@@ -1412,7 +1414,9 @@ bool DEMO_APP::Run()
 #pragma region Setting Vertex Buffers
 		devicecontext->IASetVertexBuffers(NULL, 1, &loadedvertexbuffer, &stride, &offset);
 #pragma endregion
-
+#pragma region Setting Sampler State
+		devicecontext->PSSetSamplers(0, 1, &samplerState);
+#pragma endregion
 #pragma region Draw Pyramid
 		devicecontext->Draw(15, 0);
 #pragma endregion
@@ -1616,6 +1620,8 @@ bool DEMO_APP::ShutDown()
 	SAFERELEASE(planeIndex4);
 
 	SAFERELEASE(treeindex);
+	SAFERELEASE(samplerState);
+	
 
 	SAFERELEASE(Rasterstate);
 	SAFERELEASE(transparentrender);
