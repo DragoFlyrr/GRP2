@@ -52,6 +52,7 @@ class DEMO_APP
 	ID3D11Buffer*					loadedvertexbuffer;
 	ID3D11Buffer*					loadedvertexbuffer2;
 
+	ID3D11Buffer*					treeindex;
 
 
 
@@ -598,6 +599,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 
 	LoadOBJ("treething2.obj", verticies2, uvs2, normals2);
 	SIMPLE_VERTEX loadedvertricies2[1092];
+	unsigned int loadedindicies2[1092] = { 0 };
 	for (unsigned int i = 0; i < 1092; i++)
 	{
 		loadedvertricies2[i].vertex[0] = verticies2[i].x;
@@ -608,6 +610,8 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 		loadedvertricies2[i].normals[0] = normals2[i].x;
 		loadedvertricies2[i].normals[1] = normals2[i].y;
 		loadedvertricies2[i].normals[2] = normals2[i].z;
+
+		loadedindicies2[i] = i;
 	}
 #pragma endregion
 
@@ -863,6 +867,14 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	PlaneIndex4.CPUAccessFlags = NULL;
 	PlaneIndex4.ByteWidth = sizeof(unsigned int) * 6;
 	PlaneIndex4.StructureByteStride = sizeof(unsigned int);
+
+	D3D11_BUFFER_DESC TreeIndex;
+	ZeroMemory(&TreeIndex, sizeof(TreeIndex));
+	TreeIndex.Usage = D3D11_USAGE_IMMUTABLE;
+	TreeIndex.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	TreeIndex.CPUAccessFlags = NULL;
+	TreeIndex.ByteWidth = sizeof(unsigned int) * 1092;
+	TreeIndex.StructureByteStride = sizeof(unsigned int);
 #pragma endregion
 
 #pragma region Setting Constant Buffer Descriptions
@@ -891,7 +903,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 
 	D3D11_SUBRESOURCE_DATA data8;
 	ZeroMemory(&data8, sizeof(data8));
-	data8.pSysMem = &loadedvertricies2;
+	data8.pSysMem = loadedvertricies2;
 
 	D3D11_SUBRESOURCE_DATA data9;
 	ZeroMemory(&data9, sizeof(data9));
@@ -943,11 +955,15 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 
 	D3D11_SUBRESOURCE_DATA data7;
 	ZeroMemory(&data7, sizeof(data7));
-	data7.pSysMem = &plane5;
+	data7.pSysMem = plane5;
 
 	D3D11_SUBRESOURCE_DATA indexdata7;
 	ZeroMemory(&indexdata7, sizeof(indexdata7));
-	indexdata7.pSysMem = &planeindex5;
+	indexdata7.pSysMem = planeindex5;
+
+	D3D11_SUBRESOURCE_DATA treeindexdata;
+	ZeroMemory(&treeindexdata, sizeof(treeindexdata));
+	treeindexdata.pSysMem = loadedindicies2;
 
 	D3D11_SUBRESOURCE_DATA constdata;
 	constdata.pSysMem = &toShader;
@@ -972,6 +988,8 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	device->CreateBuffer(&PlaneIndex2, &indexdata4, &planeIndex2);
 	device->CreateBuffer(&PlaneIndex3, &indexdata5, &planeIndex3);
 	device->CreateBuffer(&PlaneIndex4, &indexdata7, &planeIndex4);
+
+	device->CreateBuffer(&TreeIndex, &treeindexdata, &treeindex);
 
 
 	device->CreateBuffer(&constbuffdesc, &constdata, &Constbuffer);
@@ -1082,6 +1100,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	rasterdesc2.FrontCounterClockwise = false;
 	rasterdesc2.FillMode = D3D11_FILL_SOLID;
 	rasterdesc2.CullMode = D3D11_CULL_NONE;
+	rasterdesc2.DepthClipEnable = true;
 	rasterdesc2.AntialiasedLineEnable = true;
 	rasterdesc2.MultisampleEnable = true;
 	device->CreateRasterizerState(&rasterdesc2, &transparentrender);
@@ -1091,6 +1110,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	rasterdesc3.FrontCounterClockwise = false;
 	rasterdesc3.FillMode = D3D11_FILL_SOLID;
 	rasterdesc3.CullMode = D3D11_CULL_FRONT;
+	rasterdesc3.DepthClipEnable = true;
 	rasterdesc3.AntialiasedLineEnable = true;
 	rasterdesc3.MultisampleEnable = true;
  #pragma endregion
@@ -1274,7 +1294,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Setting Depth Stencil State
-		devicecontext->OMSetDepthStencilState(StencilState, 0);
+		//devicecontext->OMSetDepthStencilState(StencilState, 0);
 		devicecontext->ClearDepthStencilView(StencilView, D3D11_CLEAR_DEPTH, 1, 0);
 #pragma endregion
 
@@ -1413,8 +1433,12 @@ bool DEMO_APP::Run()
 		devicecontext->PSSetSamplers(0, 1, &samplerState);
 #pragma endregion
 
+#pragma region Setting index Buffer
+		devicecontext->IASetIndexBuffer(treeindex, DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
+#pragma endregion
+
 #pragma region Draw Death
-		devicecontext->Draw(1092, 0);
+		devicecontext->DrawIndexed(1092, 0,0);
 #pragma endregion
 
 
@@ -1590,6 +1614,9 @@ bool DEMO_APP::ShutDown()
 	SAFERELEASE(planeIndex2);
 	SAFERELEASE(planeIndex3);
 	SAFERELEASE(planeIndex4);
+
+	SAFERELEASE(treeindex);
+
 	SAFERELEASE(Rasterstate);
 	SAFERELEASE(transparentrender);
 	SAFERELEASE(blendstate);
