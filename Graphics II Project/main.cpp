@@ -16,6 +16,7 @@
 #pragma comment(lib, "d3d11.lib")
 #define BACKBUFFER_WIDTH	1280
 #define BACKBUFFER_HEIGHT	720
+#define NumSamples 4
 #define SAFERELEASE(p) {if(p){p->Release(), p = nullptr;}}
 using namespace std;
 using namespace DirectX;
@@ -210,7 +211,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	desc.BufferDesc.RefreshRate = { 1, 60 };
 	desc.BufferDesc.Height = BACKBUFFER_HEIGHT;
 	desc.BufferDesc.Width = BACKBUFFER_WIDTH;
-	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Count = NumSamples;
 	desc.OutputWindow = window;
 	desc.Windowed = true;
 
@@ -1021,8 +1022,9 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	textdesc.Width = BACKBUFFER_WIDTH;
 	textdesc.Height = BACKBUFFER_HEIGHT;
 	textdesc.ArraySize = 1;
-	textdesc.SampleDesc = { 1, 0 };
+	textdesc.SampleDesc = { NumSamples, 0 };
 	textdesc.MipLevels = 1;
+	
 	device->CreateTexture2D(&textdesc, NULL, &ZBuffer);
 #pragma endregion
 
@@ -1050,7 +1052,7 @@ DEMO_APP::DEMO_APP(HINSTANCE hinst, WNDPROC proc)
 	desc1.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
 	stencildesc.FrontFace = desc1;
 
-	device->CreateDepthStencilView(ZBuffer, &stenview, &StencilView);
+	device->CreateDepthStencilView(ZBuffer, nullptr, &StencilView);
 	device->CreateDepthStencilState(&stencildesc, &StencilState);
 #pragma endregion
 
@@ -1476,7 +1478,7 @@ bool DEMO_APP::Run()
 
 
 #pragma region Drawing Plane1
-		devicecontext->DrawIndexed(6, 0, 0);
+		//devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
 
 #pragma region Setting Vertex Buffers
@@ -1488,7 +1490,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Drawing Plane2
-		devicecontext->DrawIndexed(6, 0, 0);
+		//devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
 
 #pragma region Setting Vertex Buffers
@@ -1500,7 +1502,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Drawing Plane3
-		devicecontext->DrawIndexed(6, 0, 0);
+		//devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
 
 #pragma region Setting Vertex Buffers
@@ -1512,7 +1514,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Drawing Plane4
-		devicecontext->DrawIndexed(6, 0, 0);
+		//devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
 		}
 		else
@@ -1527,7 +1529,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Drawing Plane4
-			devicecontext->DrawIndexed(6, 0, 0);	
+		//	devicecontext->DrawIndexed(6, 0, 0);	
 #pragma endregion
 
 
@@ -1540,7 +1542,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Drawing Plane3
-			devicecontext->DrawIndexed(6, 0, 0);
+		//	devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
 
 #pragma region Setting Vertex Buffers
@@ -1552,7 +1554,7 @@ bool DEMO_APP::Run()
 #pragma endregion
 
 #pragma region Drawing Plane2
-			devicecontext->DrawIndexed(6, 0, 0);
+		//	devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
 
 #pragma region Setting Vertex Buffers
@@ -1565,7 +1567,7 @@ bool DEMO_APP::Run()
 
 
 #pragma region Drawing Plane1
-			devicecontext->DrawIndexed(6, 0, 0);
+		//	devicecontext->DrawIndexed(6, 0, 0);
 #pragma endregion
 		}
 
