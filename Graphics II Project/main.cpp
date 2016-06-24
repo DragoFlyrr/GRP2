@@ -1289,6 +1289,7 @@ bool DEMO_APP::Run()
 		pointlightreversed = true;
 	if (toShader3.pointlightpos[0] <= -10)
 		pointlightreversed = false;
+	
 #pragma endregion
 
 #pragma region Setting Render Targets
